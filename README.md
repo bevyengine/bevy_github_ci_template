@@ -1,0 +1,1 @@
+# Bevy GitHub CI Template
