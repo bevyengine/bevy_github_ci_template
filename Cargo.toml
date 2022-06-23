@@ -8,11 +8,7 @@ license = "MIT OR Apache-2.0"
 crate-type = ["lib", "cdylib", "staticlib"]
 
 [dependencies]
-
-[dependencies.bevy]
-version = "0.7"
-default_features = false
-features = ["bevy_winit", "render", "png", "vorbis", "bevy_audio"]
+bevy = "0.6"
 
 # Android configuration
 
