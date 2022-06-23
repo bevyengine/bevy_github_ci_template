@@ -1,1 +1,4 @@
 /target
+apple/build
+.idea
+Cargo.lock
