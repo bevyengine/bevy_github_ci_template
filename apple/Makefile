@@ -6,7 +6,7 @@ ifndef DEVICE_ID
 endif
 
 run: install
-	xcrun simctl launch --console $(DEVICE) com.bevy.bevy_github_ci_template
+	xcrun simctl launch --console $(DEVICE) com.bevy.BevyGithubCiTemplate
 
 boot-sim:
 	xcrun simctl boot $(DEVICE) || true

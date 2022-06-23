@@ -13,6 +13,7 @@
 		F401646527D10F0D00610DC9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F401646427D10F0D00610DC9 /* main.m */; };
 		F401646027D10D9900610DC9 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F401645F27D10D9900610DC9 /* libc++.tbd */; };
         F401646727D10F3F00610DC9 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = F401646627D10F3F00610DC9 /* assets */; };
+		F4361FE928645DE400819A92 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4361FE828645DE400819A92 /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		F401645F27D10D9900610DC9 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		F401646427D10F0D00610DC9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F401645B27D10D7F00610DC9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		F4361FE828645DE400819A92 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +46,7 @@
 			files = (
 				F401645E27D10D8400610DC9 /* Security.framework in Frameworks */,
 				F401645A27D10D4800610DC9 /* Metal.framework in Frameworks */,
+				F4361FE928645DE400819A92 /* AudioToolbox.framework in Frameworks */,
 				F401645C27D10D7F00610DC9 /* UIKit.framework in Frameworks */,
 				F401646027D10D9900610DC9 /* libc++.tbd in Frameworks */,
 			);
@@ -87,6 +90,7 @@
 				F401645927D10D4800610DC9 /* Metal.framework */,
 				F401645D27D10D8400610DC9 /* Security.framework */,
 				F401645B27D10D7F00610DC9 /* UIKit.framework */,
+				F4361FE828645DE400819A92 /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -241,8 +245,8 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SYMROOT = build;
 				SWIFT_VERSION = 5.0;
+				SYMROOT = build;
 			};
 			name = Debug;
 		};
@@ -313,9 +317,9 @@
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"src/",
+					src/,
 				);
-				INFOPLIST_FILE = "src/Info.plist";
+				INFOPLIST_FILE = src/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -338,7 +342,7 @@
 					"-lbevy_github_ci_template",
 					"-lc++abi",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.bevy.bevy_github_ci_template;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bevy.BevyGithubCiTemplate;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -381,7 +385,7 @@
 					"-lbevy_github_ci_template",
 					"-lc++abi",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.bevy.bevy_github_ci_template;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bevy.BevyGithubCiTemplate;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
