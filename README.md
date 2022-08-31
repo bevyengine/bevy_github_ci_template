@@ -53,3 +53,23 @@ A new release will be available in GitHub, with the archives per platform availb
 
 The `git` commands above produced this release: [my-game-1.0](
 https://github.com/bevyengine/bevy_github_ci_template/releases/tag/my-game-1.0).
+
+## itch.io
+
+Definition: [.github/workflows/publish.itch.io.yaml](./.github/workflows/publish.itch.io.yaml)
+
+This workflow must be ran manually from GitHub UI. After pushing, go to the
+repository's Actions tab, click on "Publish to itch.io" in the sidebar, and run
+the workflow with the "Run workflow" button.
+
+### Required Configuration
+
+1. Create an API key in https://itch.io/user/settings/api-keys
+2. Go to the repository's Settings tab in GitHub, click on Secrets->Actions in
+   the sidebar,and add a repository secret named `BUTLER_CREDENTIALS` set to
+   the API key.
+3. Change the `env` settings in this file according to your game:
+  * Change `env.binary` to the name of the binary (without suffix) `cargo
+    build` produces.
+  * Change `env.itch_target` to the itch.io username and the name of the game
+    on itch.io, separated by a slash (`/`)
