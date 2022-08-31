@@ -39,11 +39,11 @@ jobs:
         run: |
           wasm-bindgen --no-typescript --out-name bevy_game --out-dir wasm --target web target/wasm32-unknown-unknown/release/${{ env.binary }}.wasm
           cp -r assets wasm/
+
       - name: Package as a zip
-        uses: vimtor/action-zip@v1
-        with:
-          files: wasm
-          dest: ${{ env.binary }}.zip
+        working-directory: ./wasm
+        run: |
+          zip --recurse-paths ../${{ env.binary }}.zip .
 
       - name: Upload binaries to artifacts
         uses: actions/upload-artifact@v3
@@ -87,11 +87,11 @@ jobs:
           mkdir linux
           cp target/x86_64-unknown-linux-gnu/release/${{ env.binary }} linux/
           cp -r assets linux/
+
       - name: Package as a zip
-        uses: vimtor/action-zip@v1
-        with:
-          files: linux
-          dest: ${{ env.binary }}.zip
+        working-directory: ./linux
+        run: |
+          zip --recurse-paths ../${{ env.binary }}.zip .
 
       - name: Upload binaries to artifacts
         uses: actions/upload-artifact@v3
@@ -132,11 +132,10 @@ jobs:
           mkdir windows
           cp target/x86_64-pc-windows-msvc/release/${{ env.binary }}.exe windows/
           cp -r assets windows/
+
       - name: Package as a zip
-        uses: vimtor/action-zip@v1
-        with:
-          files: windows
-          dest: ${{ env.binary }}.zip
+        run: |
+          Compress-Archive -Path windows/* -DestinationPath ${{ env.binary }}.zip
 
       - name: Upload binaries to artifacts
         uses: actions/upload-artifact@v3
