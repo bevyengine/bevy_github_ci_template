@@ -34,6 +34,8 @@ It will build:
 
 If you don't want to target some of those platforms, you can remove the corresponding job from the file [release.yaml](./.github/workflows/release.yaml).
 
+If you don't want to attach the builds to the GitHub release, set `env.add_binaries_to_github_release` to `false`.
+
 ### Git Tag from GitHub UI
 
 You can follow [Managing releases in a repository](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)
@@ -53,3 +55,13 @@ A new release will be available in GitHub, with the archives per platform availb
 
 The `git` commands above produced this release: [my-game-1.0](
 https://github.com/bevyengine/bevy_github_ci_template/releases/tag/my-game-1.0).
+
+### Publish on itch.io
+
+The release flow can be configured to push the releases to itch.io:
+
+1. Create an API key in https://itch.io/user/settings/api-keys
+2. Go to the repository's Settings tab in GitHub, click on Secrets->Actions in the sidebar,and add a repository secret named `BUTLER_CREDENTIALS` set to the API key.
+3. Uncomment `env.itch_target` in `release.yaml` and set it to the itch.io username and the name of the game on itch.io, separated by a slash (`/`)
+
+Once that is done, any tag pushed to GitHub will trigger an itch.io release and use the tag as the [user version](https://itch.io/docs/butler/pushing.html#specifying-your-own-version-number).
