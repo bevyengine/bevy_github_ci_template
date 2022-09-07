@@ -1,6 +1,6 @@
 # Bevy GitHub CI Template
 
-This repo show how to setup CI on a github project for Bevy.
+This repo show how to set up CI on a GitHub project for Bevy.
 
 It creates two workflows:
 
@@ -11,7 +11,7 @@ It creates two workflows:
 
 Definition: [.github/workflows/ci.yaml](./.github/workflows/ci.yaml)
 
-This workflow runs on every commit to `main` branch, and on every PR targetting the `main` branch.
+This workflow runs on every commit to `main` branch, and on every PR targeting the `main` branch.
 
 It will use rust stable on linux, with cache between different executions, those commands:
 
@@ -51,10 +51,21 @@ git push --tags
 
 ### Result
 
-A new release will be available in GitHub, with the archives per platform availble as downloadable assets.
+A new release will be available in GitHub, with the archives per platform available as downloadable assets.
 
 The `git` commands above produced this release: [my-game-1.0](
 https://github.com/bevyengine/bevy_github_ci_template/releases/tag/my-game-1.0).
+
+## Using the workflows in your own project
+
+If you would like to use the GitHub workflows included here for your own project, there are a few things you might have to adapt:
+
+1. The release workflow relies on the `index.html` file under `/wasm` for web builds
+2. Make sure that the env variable `binary` ([release.yaml](.github/workflows/release.yaml#L10)) matches the name of your binary
+3. In case your project doesn't have an `assets` folder
+   1. Either create one and put a `.gitkeep` file in it to be able to push it
+   2. Or remove the `cp -r assets` statements in the build jobs
+4. Adapt the used toolchain if you are using nightly
 
 ### Publish on itch.io
 
