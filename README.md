@@ -60,7 +60,7 @@ If you would like to use the GitHub workflows included here for your own project
 
 1. The release workflow relies on the `index.html` file under `/wasm` for web builds
 2. Make sure that the env variable `binary` ([release.yaml](.github/workflows/release.yaml#L10)) matches the name of your binary
-3. In case your project doesn't have an asset folder
+3. In case your project doesn't have an `assets` folder
    1. Either create one and put a `.gitkeep` file in it to be able to push it
    2. Or remove the `cp -r assets` statements in the build jobs
 4. Adapt the used toolchain if you are using nightly
