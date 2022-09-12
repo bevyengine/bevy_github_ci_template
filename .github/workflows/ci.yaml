@@ -10,7 +10,6 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-
   # Run cargo test
   test:
     name: Test Suite
@@ -71,7 +70,7 @@ jobs:
         uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: -- -D warnings
+          args: -- -D warnings -Aclippy::type_complexity -Aclippy::too_many_arguments
 
   # Run cargo fmt --all -- --check
   format:
