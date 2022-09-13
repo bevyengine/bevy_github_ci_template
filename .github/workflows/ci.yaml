@@ -10,7 +10,6 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-
   # Run cargo test
   test:
     name: Test Suite
