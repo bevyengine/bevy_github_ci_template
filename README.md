@@ -66,6 +66,7 @@ If you would like to use the GitHub workflows included here for your own project
    1. Either create one and put a `.gitkeep` file in it to be able to push it
    2. Or remove the `cp -r assets` statements in the build jobs
 4. Adapt the used toolchain if you are using nightly
+5. If you have enabled [fast compile optimizations](https://bevyengine.org/learn/book/getting-started/setup/#enable-fast-compiles-optional) with lld, make sure to change `is_lld_enabled` to true at [.github/workflows/release.yaml](./.github/workflows/release.yaml) so that it compiles on macOS.
 
 ### Publish on itch.io
 

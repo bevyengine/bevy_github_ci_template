@@ -9,6 +9,7 @@ env:
   # update with the name of the main binary
   binary: bevy_github_ci_template
   add_binaries_to_github_release: true
+  is_lld_configured: false
   #itch_target: <itch.io-username>/<game-name>
 
 
@@ -155,7 +156,7 @@ jobs:
 
   # Build for macOS
   release-macos:
-    runs-on: macOS-latest
+    runs-on: macos-latest
 
     steps:
       - uses: little-core-labs/get-git-tag@v3.0.1
@@ -170,6 +171,9 @@ jobs:
         run: |
           export CFLAGS="-fno-stack-check"
           export MACOSX_DEPLOYMENT_TARGET="10.9"
+      - name: Install zld
+        if: ${{ env.is_lld_configured == 'true' }}
+        run: brew install michaeleisel/zld/zld
 
       - name: Build
         run: |
