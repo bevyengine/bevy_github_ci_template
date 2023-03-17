@@ -22,11 +22,9 @@ jobs:
       - uses: little-core-labs/get-git-tag@v3.0.1
         id: get_version
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
           target: wasm32-unknown-unknown
-          override: true
       - name: install wasm-bindgen-cli
         run: |
           cargo install wasm-bindgen-cli
@@ -69,7 +67,7 @@ jobs:
       - uses: little-core-labs/get-git-tag@v3.0.1
         id: get_version
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
           target: x86_64-unknown-linux-gnu
@@ -117,11 +115,9 @@ jobs:
       - uses: little-core-labs/get-git-tag@v3.0.1
         id: get_version
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
           target: x86_64-pc-windows-msvc
-          override: true
 
       - name: Build
         run: |
@@ -161,11 +157,9 @@ jobs:
       - uses: little-core-labs/get-git-tag@v3.0.1
         id: get_version
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
           target: x86_64-apple-darwin
-          override: true
       - name: Environment Setup
         run: |
           export CFLAGS="-fno-stack-check"
