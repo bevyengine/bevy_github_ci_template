@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: little-core-labs/get-git-tag@v3.0.1
+      - uses: olegtarasov/get-tag@v2.1.2
         id: get_version
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
@@ -64,9 +64,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: little-core-labs/get-git-tag@v3.0.1
+      - uses: olegtarasov/get-tag@v2.1.2
         id: get_version
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-unknown-linux-gnu
@@ -110,9 +110,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: little-core-labs/get-git-tag@v3.0.1
+      - uses: olegtarasov/get-tag@v2.1.2
         id: get_version
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-pc-windows-msvc
@@ -152,9 +152,9 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-      - uses: little-core-labs/get-git-tag@v3.0.1
+      - uses: olegtarasov/get-tag@v2.1.2
         id: get_version
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-apple-darwin
@@ -198,9 +198,9 @@ jobs:
       - id: check-env
         run: |
           if [[ -z "$itch_target" ]]; then
-            echo "::set-output name=has-itch-target::no"
+            echo "has-itch-target=no" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=has-itch-target::yes"
+            echo "has-itch-target=yes" >> $GITHUB_OUTPUT
           fi
 
   upload-to-itch:
@@ -225,7 +225,7 @@ jobs:
           unzip butler.zip
           chmod +x butler
           ./butler -V
-      - uses: little-core-labs/get-git-tag@v3.0.1
+      - uses: olegtarasov/get-tag@v2.1.2
         id: get_version
       - name: Upload to itch.io
         env:
