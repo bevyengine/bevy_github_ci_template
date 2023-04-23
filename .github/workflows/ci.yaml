@@ -18,7 +18,7 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v3
       - name: Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cargo/bin/
@@ -42,7 +42,7 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v3
       - name: Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cargo/bin/
