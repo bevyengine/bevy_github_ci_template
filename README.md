@@ -66,6 +66,8 @@ If you would like to use the GitHub workflows included here for your own project
    1. Either create one and put a `.gitkeep` file in it to be able to push it
    2. Or remove the `cp -r assets` statements in the build jobs
 4. Adapt the used toolchain if you are using nightly
+5. In your GitHub repo's settings, under `Actions -> General` make sure "Read and Write permissions" is selected under "Workflow permissions" near the bottom. This fixes the error `Error: Resource not accessible by integration`.
+
 
 ### Publish on itch.io
 
