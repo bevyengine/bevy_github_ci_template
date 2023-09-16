@@ -147,7 +147,7 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
 
-  # Build for macOS-x86_64
+  # Build for MacOS x86_64
   release-macOS-intel:
     runs-on: macOS-latest
 
@@ -190,6 +190,7 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
 
+  # Build for MacOS Apple Silicon
   release-macOS-apple-silicon:
     runs-on: macOS-latest
 
