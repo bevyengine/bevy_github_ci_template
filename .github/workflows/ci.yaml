@@ -14,6 +14,7 @@ jobs:
   test:
     name: Test Suite
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -38,6 +39,7 @@ jobs:
   clippy_check:
     name: Clippy
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -64,6 +66,7 @@ jobs:
   format:
     name: Format
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
