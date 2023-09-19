@@ -19,13 +19,13 @@ env:
   add_github_release: true
 
   # Itch.io
-  add_itchio_release: true
+  add_itchio_release: false
   # Example of itchio_target: cart/build-a-better-buddy
   # Check the url of your game page in itch.io
-  itchio_target: ameknite/bevy-game
+  # itchio_target: <user>/<your-game>
 
   # Github pages
-  add_github_pages_release: true
+  add_github_pages_release: false
 
 permissions:
   contents: write
