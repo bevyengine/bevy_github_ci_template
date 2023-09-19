@@ -75,6 +75,32 @@ on:
         type: string
 
 jobs:
+  load-env:
+    runs-on: ubuntu-latest
+    steps:
+      - id: check-itch-target
+        run: |
+          echo ${{env.binary}}
+          if [[ -z ${{env.itchio_target || inputs.itchio_target}} ]]; then
+            echo "target_exists=false" >> $GITHUB_OUTPUT
+          else
+            echo "target_exists=true" >> $GITHUB_OUTPUT
+          fi
+
+      - id: get_version
+        uses: olegtarasov/get-tag@v2.1.2
+
+    outputs:
+      run-build-web: ${{(inputs.tag && inputs.add_web) || (!inputs.tag && env.add_web)}}
+      run-build-linux: ${{(inputs.tag && inputs.add_linux) || (!inputs.tag && env.add_linux)}}
+      run-build-windows: ${{(inputs.tag && inputs.add_windows) || (!inputs.tag && env.add_windows)}}
+      run-build-macos-intel: ${{(inputs.tag && inputs.add_macos_intel) || (!inputs.tag && env.add_macos_apple_silicon)}}
+      run-build-macos-apple-silicon: ${{(inputs.tag && inputs.add_macos_apple_silicon) || (!inputs.tag && env.add_macos_apple_silicon)}}
+      run_github_release: ${{(inputs.tag && inputs.add_github_release) || (!inputs.tag && env.add_github_release)}}
+      run_itchio_release: ${{(inputs.tag && inputs.add_itchio_release) || (!inputs.tag && env.add_itchio_release)}}
+      run_github_pages_release: ${{(inputs.tag && inputs.add_github_pages_release) || (!inputs.tag && env.add_github_pages_release)}}
+      has_itchio_target: ${{steps.check-itch-target.outputs.target_exists}}
+      tag: ${{(inputs.tag || steps.get_version.outcome.tag)}}
 
   # Build for wasm
   release-wasm:
