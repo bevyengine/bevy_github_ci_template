@@ -147,7 +147,7 @@ To publish on GitHub Pages, follow these steps:
 If you'd like to use the GitHub workflows provided here for your own project, you may need to make a few adjustments:
 
 1. For web builds, ensure that your project includes an `index.html` file under the `/wasm` directory.
-2. Make sure that the environment variable `binary` int ([release.yaml](.github/workflows/release.yaml#L7)) matches the name of your binary.
+2. Make sure that the name of your repository matches the name of your binary. If the name of your repository is different, simply change the environment variable `binary` in the ([release.yaml](.github/workflows/release.yaml#L7)) file to match the name of your binary.
 3. If your project doesn't have an `assets` folder:
     1. You can create one and add a `.gitkeep` file to it to enable you to push it to your repository.
     2. Alternatively, if your project does not use assets, you can remove the `cp -r assets` statements from the build jobs in the workflow.
