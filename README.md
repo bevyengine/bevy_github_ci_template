@@ -1,83 +1,148 @@
 # Bevy GitHub CI Template
 
-This repo show how to set up CI on a GitHub project for Bevy.
+Template for setting up continuous integration (CI) on a GitHub project for Bevy. This template enables you to test your code, build for the Web, Linux, Windows, MacOS, and publish to GitHub Releases, Itch.io, and GitHub Pages.
 
 It creates two workflows:
 
-* [CI](#CI)
-* [Release](#Release)
+* [CI](#ci)
+* [Release](#release)
 
 ## CI
 
 Definition: [.github/workflows/ci.yaml](./.github/workflows/ci.yaml)
 
+![Screenshot 2023-09-18 at 17 53 05](https://user-images.githubusercontent.com/104745335/268799840-06b772e8-7901-4b86-9a88-e4afee8a0167.png)
+
+
 This workflow runs on every commit to `main` branch, and on every PR targeting the `main` branch.
 
-It will use rust stable on linux, with cache between different executions, those commands:
+It will use Rust stable on Linux with caching between different executions. The following commands are executed:
 
 * `cargo test`
 * `cargo clippy -- -D warnings`
 * `cargo fmt --all -- --check`
 
-If you are using anything OS specific or rust nightly, you should update the file [ci.yaml](./.github/workflows/ci.yaml) to use those.
+If you are using anything OS-specific or Rust nightly, you should update the [ci.yaml](./.github/workflows/ci.yaml) file  accordingly.
 
 ## Release
 
 Definition: [.github/workflows/release.yaml](./.github/workflows/release.yaml)
 
-This workflow runs on every tag.
+### Run Workflow
 
-It will build:
-* For Linux and Windows, a .zip archive containing the executable and the `assets`.
-* For macOS, a dmg image with a .app containing the assets.
-* For wasm, a .zip archive with the wasm binary, the js bindings, an html file loading it, and the assets.
+This workflow runs every time you push a tag to your repo.
 
-If you don't want to target some of those platforms, you can remove the corresponding job from the file [release.yaml](./.github/workflows/release.yaml).
-
-If you don't want to attach the builds to the GitHub release, set `env.add_binaries_to_github_release` to `false`.
-
-### Git Tag from GitHub UI
-
-You can follow [Managing releases in a repository](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)
-
-### Git Tag from the CLI
-
-Execute the following commands: 
+Example using git:
 
 ```sh
-git tag -a "my-game-1.0" -m "First official release"
+git tag -a "v1.0.0" -m "First official release"
 git push --tags
 ```
 
-### Result
+You can use the workflow as it is, but check that the name of your repository matches the name of your binary. If they don't match, you can change the environment variable in [release.yaml](.github/workflows/release.yaml#L7) file. By default it will build for the Web, Linux, Windows, and MacOS, and then it will publish the archives on GitHub Release.
 
-A new release will be available in GitHub, with the archives per platform available as downloadable assets.
+You can configure the builds and publish targets by changing the env variables in the [release.yaml](.github/workflows/release.yaml#L4) file.
 
-The `git` commands above produced this release: [my-game-1.0](
-https://github.com/bevyengine/bevy_github_ci_template/releases/tag/my-game-1.0).
+Also you can configure and triggered the workflow directly in your GitHub repo. Navigate to the `Actions` section, click `Release` on the sidebar, then press the `Run workflow` button and select the configuration for the build and publish targets you want.
 
-## Using the workflows in your own project
+![Run workflow](https://github-production-user-asset-6210df.s3.amazonaws.com/104745335/268779376-85f4a503-1564-4075-b1ee-2a830fda2b7c.png)
 
-If you would like to use the GitHub workflows included here for your own project, there are a few things you might have to adapt:
+The configuration in GitHub takes priority over the env variables in the [release.yaml](.github/workflows/release.yaml#L4) file, so you don't have to modify your env variables. The manual workflow also enables you to override the tag version eliminating the need to create another tag to trigger the workflow."
 
-1. The release workflow relies on the `index.html` file under `/wasm` for web builds
-2. Make sure that the env variable `binary` ([release.yaml](.github/workflows/release.yaml#L10)) matches the name of your binary
-3. In case your project doesn't have an `assets` folder
-   1. Either create one and put a `.gitkeep` file in it to be able to push it
-   2. Or remove the `cp -r assets` statements in the build jobs
-4. Adapt the used toolchain if you are using nightly
-5. In your GitHub repo's settings, under `Actions -> General` make sure "Read and Write permissions" is selected under "Workflow permissions" near the bottom. This fixes the error `Error: Resource not accessible by integration`.
+### Build
 
+You can build for the following platforms:
 
-### Publish on itch.io
+* For Linux and Windows, create a .zip archive containing the executable and the `assets` folder.
+* For MacOS, generate two versions: one for Intel x86_64 and one for Apple Silicon ARM64, each packaged in a .dmg image containing a .app file with the assets.
+* For the Web, produce a .zip archive with the WebAssembly (wasm) binary, JavaScript bindings, an HTML file for loading it, and the assets.
 
-The release flow can be configured to push the releases to itch.io:
+By default, it builds for all platforms, but you can disable specific targets by setting their environment variable  `false` in the ([release.yaml](.github/workflows/release.yaml#L9)) file.
 
-1. Create an API key in https://itch.io/user/settings/api-keys
-2. Go to the repository's Settings tab in GitHub, click on Secrets->Actions in the sidebar,and add a repository secret named `BUTLER_CREDENTIALS` set to the API key.
-3. Uncomment `env.itch_target` in `release.yaml` and set it to the itch.io username and the name of the game on itch.io, separated by a slash (`/`)
+For example, `add_windows: false` will skip the Windows build.
 
-Once that is done, any tag pushed to GitHub will trigger an itch.io release and use the tag as the [user version](https://itch.io/docs/butler/pushing.html#specifying-your-own-version-number).
+The build files will be uploaded to the artifacts section of their respective workflow runs. To access them, go to your GitHub repository, navigate to the `Actions` section, click on `Release` in the sidebar, select the `workflow run` triggered by your tag, and scroll down to find your artifacts.
+
+![Artifacts](https://github-production-user-asset-6210df.s3.amazonaws.com/104745335/268779709-2e1b3f0b-446b-40f1-8430-39583cb37cdd.png)
+
+### Publish
+
+You can publish to the following platforms:
+
+- [Bevy GitHub CI Template](#bevy-github-ci-template)
+  - [CI](#ci)
+  - [Release](#release)
+    - [Run Workflow](#run-workflow)
+    - [Build](#build)
+    - [Publish](#publish)
+    - [Publish on Github Release](#publish-on-github-release)
+    - [Publish on Itch.io](#publish-on-itchio)
+    - [Publish on Github pages](#publish-on-github-pages)
+  - [Adapting the Workflows for Your Project](#adapting-the-workflows-for-your-project)
+  - [License](#license)
+  - [Contribution](#contribution)
+
+By default, it only publishes to GitHub Releases, but you can enable or disable any target by setting their environment variable to `true` or `false` in the ([release.yaml](.github/workflows/release.yaml#L16)) file.
+
+For example, `add_github_pages_release: true` will publish the web version of your game to GitHub Pages.
+
+Every time you trigger this workflow, it will upload the files for every platform you enable in the build process.
+
+The naming convention for the uploaded files will follow this structure:
+
+`<Name of your binary>_<tag>_<platform>.<format>`
+
+The format will be .zip for web, Windows, and Linux, and .dmg for MacOS.
+
+For example: `bevy-game_v3.6_linux.zip`
+
+### Publish on Github Release
+
+This action will occur automatically every time you push a tag if you have enabled the environment variable `add_github_release: true` in the [release.yaml](./.github/workflows/release.yaml#L19) file.
+
+However, if you prefer more configuration options to manage your releases, you can do so through the GitHub CLI or the web browser:
+
+1. [Github CLI](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository?tool=cli): You can use `gh release create` to create a GitHub release iteratively from your terminal.
+2. [Web Browser](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository?tool=webui)
+
+Once you complete the process, a new release will be available on GitHub, with the archives for each platform accessible as downloadable assets.
+
+### Publish on Itch.io
+
+To publish releases to itch.io, follow this release flow:
+
+1. Create an API key at <https://itch.io/user/settings/api-keys>
+2. In your GitHub repository, go to the "Settings" tab, click on "Secrets" under the "Actions" section in the sidebar, and add a repository secret named `BUTLER_CREDENTIALS`, with the API key as its value.
+3. Create your game page on itch.io if you haven't already.
+4. In the [release.yaml](./.github/workflows/release.yaml#L22) file, set the environment variable `add_itchio_release: true`.
+5. Uncomment the `env.itchio_target` in [release.yaml](./.github/workflows/release.yaml#L25) and set it to your itch.io username and the name of the game on itch.io, separated by a slash (`/`). For example: `cart/build-a-better-buddy`. Double-check the URL of your game to ensure the name is correct.
+
+Once these steps are completed, any tag pushed to GitHub will trigger an itch.io release, and it will use the tag as the[user version](https://itch.io/docs/butler/pushing.html#specifying-your-own-version-number).
+
+To make the game visible on your itch.io page, go to your game's configuration on itch.io, and change the `Kind of project` to HTML also locate your uploaded web files, and check the box that says, `This file will be played in the browser`.
+
+![Play in browser](https://github-production-user-asset-6210df.s3.amazonaws.com/104745335/268780679-fa14874c-040b-41ff-8a04-71cf141970dc.png)
+
+### Publish on Github pages
+
+To publish on GitHub Pages, follow these steps:
+
+1. In the [release.yaml](./.github/workflows/release.yaml#L28) file, set the environment variable `add_github_pages_release: true` and the `add_web: true`.
+2. Trigger the [release.yaml](./.github/workflows/release.yaml) workflow by pushing a tag.
+3. In your GitHub repository, go to the `Settings` tab, then click on `Pages` in the sidebar. Navigate to the `Build and Deployment` section, select the `gh-pages` branch and set the `root` folder. Finally, click on `Save`. ![Github Pages](https://github-production-user-asset-6210df.s3.amazonaws.com/104745335/268780368-af547adf-d8e8-4bdf-90e5-b7ee717493dc.png)
+4. Wait a few minutes and your page will be available at a URL following this structure: `https://<Your GitHub username>.github.io/<Name of your repository>/`
+
+## Adapting the Workflows for Your Project
+
+If you'd like to use the GitHub workflows provided here for your own project, you may need to make a few adjustments:
+
+1. For web builds, ensure that your project includes an `index.html` file under the `/wasm` directory.
+2. Make sure that the environment variable `binary` int ([release.yaml](.github/workflows/release.yaml#L7)) matches the name of your binary.
+3. If your project doesn't have an `assets` folder:
+    1. You can create one and add a `.gitkeep` file to it to enable you to push it to your repository.
+    2. Alternatively, if your project does not use assets, you can remove the `cp -r assets` statements from the build jobs in the workflow.
+4. If you are using a nightly toolchain or a specific Rust version, make sure to adapt the toolchain version as needed.
+5. If you encounter the error `Error: Resource not accessible by integration,`. Go to your GitHub repository's settings, and under `Actions -> General,` ensure that `Read and Write permissions` are selected under `Workflow permissions` near the bottom.
 
 ## License
 
