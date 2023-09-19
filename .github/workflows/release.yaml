@@ -27,6 +27,8 @@ env:
   # Github pages
   add_github_pages_release: true
 
+permissions:
+  contents: write
 
 on:
   push:
