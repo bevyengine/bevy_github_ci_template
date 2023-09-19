@@ -43,27 +43,21 @@ on:
       add_web:
         description: 'Build for Web:'
         type: boolean
-        default: true
       add_linux:
         description: 'Build for Linux:'
         type: boolean
-        default: true
       add_windows:
         description: 'Build for Windows:'
         type: boolean
-        default: true
       add_macos_intel:
         description: 'Build for MacOS Intel'
         type: boolean
-        default: true
       add_macos_apple_silicon:
         description: 'Build for MacOS Apple Silicon'
         type: boolean
-        default: true
       add_github_release:
         description: 'Publish to Github Release'
         type: boolean
-        default: true
       add_github_pages_release:
           description: 'Publish to Github Pages'
           type: boolean
