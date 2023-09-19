@@ -1,17 +1,38 @@
 name: Release
 
+# Configure your build and release platforms
+env:
+  # If your repo name differs from your binary name, change it.
+  # Check you Cargo.toml -> package -> name
+  binary: ${{ github.event.repository.name }} 
+
+  # Build platforms
+  add_web: true
+  add_linux: true
+  add_windows: true
+  add_macos_intel: true
+  add_macos_apple_silicon: true
+
+  # Releases
+  
+  # Github release
+  add_github_release: true
+
+  # Itch.io
+  add_itchio_release: true
+  # Example of itchio_target: cart/build-a-better-buddy
+  # Check the url of your game page in itch.io
+  itchio_target: ameknite/bevy-game
+
+  # Github pages
+  add_github_pages_release: true
+
+
 on:
   push:
     tags:
       - '*'
   workflow_dispatch:
-
-env:
-  # update with the name of the main binary
-  binary: bevy_github_ci_template
-  add_binaries_to_github_release: true
-  #itch_target: <itch.io-username>/<game-name>
-
 
 jobs:
 
@@ -52,7 +73,7 @@ jobs:
           retention-days: 1
 
       - name: Upload binaries to release
-        if: ${{ env.add_binaries_to_github_release == 'true' }}
+        if: ${{ env.add_github_release == 'true' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -99,7 +120,7 @@ jobs:
           retention-days: 1
 
       - name: Upload binaries to release
-        if: ${{ env.add_binaries_to_github_release == 'true' }}
+        if: ${{ env.add_github_release == 'true' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -142,7 +163,7 @@ jobs:
           retention-days: 1
 
       - name: Upload binaries to release
-        if: ${{ env.add_binaries_to_github_release == 'true' }}
+        if: ${{ env.add_github_release == 'true' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -186,7 +207,7 @@ jobs:
           retention-days: 1
 
       - name: Upload binaries to release
-        if: ${{ env.add_binaries_to_github_release == 'true' }}
+        if: ${{ env.add_github_release == 'true' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -230,7 +251,7 @@ jobs:
           retention-days: 1
 
       - name: Upload binaries to release
-        if: ${{ env.add_binaries_to_github_release == 'true' }}
+        if: ${{ env.add_github_release == 'true' }}
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
