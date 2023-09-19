@@ -78,7 +78,8 @@ jobs:
   load-env:
     runs-on: ubuntu-latest
     steps:
-      - id: check-itch-target
+      - name: check if itchio target exist
+        id : check-itchio-target
         run: |
           echo ${{env.binary}}
           if [[ -z ${{env.itchio_target || inputs.itchio_target}} ]]; then
@@ -99,7 +100,7 @@ jobs:
       run_github_release: ${{(inputs.tag && inputs.add_github_release) || (!inputs.tag && env.add_github_release)}}
       run_itchio_release: ${{(inputs.tag && inputs.add_itchio_release) || (!inputs.tag && env.add_itchio_release)}}
       run_github_pages_release: ${{(inputs.tag && inputs.add_github_pages_release) || (!inputs.tag && env.add_github_pages_release)}}
-      has_itchio_target: ${{steps.check-itch-target.outputs.target_exists}}
+      has_itchio_target: ${{steps.check-itchio-target.outputs.target_exists}}
       tag: ${{(inputs.tag || steps.get_version.outcome.tag)}}
 
   # Build for wasm
