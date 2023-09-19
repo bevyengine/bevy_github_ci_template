@@ -11,7 +11,7 @@ It creates two workflows:
 
 Definition: [.github/workflows/ci.yaml](./.github/workflows/ci.yaml)
 
-![Screenshot 2023-09-18 at 17 53 05](https://user-images.githubusercontent.com/104745335/268799840-06b772e8-7901-4b86-9a88-e4afee8a0167.png)
+![ci workflow](https://user-images.githubusercontent.com/104745335/268799840-06b772e8-7901-4b86-9a88-e4afee8a0167.png)
 
 
 This workflow runs on every commit to `main` branch, and on every PR targeting the `main` branch.
@@ -32,6 +32,8 @@ Definition: [.github/workflows/release.yaml](./.github/workflows/release.yaml)
 
 This workflow runs every time you push a tag to your repo.
 
+![Release workflow](https://user-images.githubusercontent.com/104745335/268805183-28e83868-fb19-4e5e-ae96-7553fa3ede3c.png)
+
 Example using git:
 
 ```sh
@@ -48,6 +50,8 @@ Also you can configure and triggered the workflow directly in your GitHub repo. 
 ![Run workflow](https://github-production-user-asset-6210df.s3.amazonaws.com/104745335/268779376-85f4a503-1564-4075-b1ee-2a830fda2b7c.png)
 
 The configuration in GitHub takes priority over the env variables in the [release.yaml](.github/workflows/release.yaml#L4) file, so you don't have to modify your env variables. The manual workflow also enables you to override the tag version eliminating the need to create another tag to trigger the workflow."
+
+For the itch.io target, you can leave it empty if you already have the environment variable set up.
 
 ### Build
 
@@ -107,6 +111,9 @@ However, if you prefer more configuration options to manage your releases, you c
 
 Once you complete the process, a new release will be available on GitHub, with the archives for each platform accessible as downloadable assets.
 
+![github release](https://user-images.githubusercontent.com/104745335/268805270-ff824032-4191-4528-9d45-a5511fef4f94.png)
+
+
 ### Publish on Itch.io
 
 To publish releases to itch.io, follow this release flow:
@@ -120,6 +127,9 @@ To publish releases to itch.io, follow this release flow:
 Once these steps are completed, any tag pushed to GitHub will trigger an itch.io release, and it will use the tag as the[user version](https://itch.io/docs/butler/pushing.html#specifying-your-own-version-number).
 
 To make the game visible on your itch.io page, go to your game's configuration on itch.io, and change the `Kind of project` to HTML also locate your uploaded web files, and check the box that says, `This file will be played in the browser`.
+
+![Kind of project](https://user-images.githubusercontent.com/104745335/268805329-fb70e23e-44ee-4f2f-9d20-11d58ddeec9a.png)
+
 
 ![Play in browser](https://github-production-user-asset-6210df.s3.amazonaws.com/104745335/268780679-fa14874c-040b-41ff-8a04-71cf141970dc.png)
 
