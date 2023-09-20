@@ -139,7 +139,7 @@ Next, to make the game visible on your Itch.io page, go to your game's configura
 
 To publish on GitHub Pages, follow these steps:
 
-1. In the [release.yaml](./.github/workflows/release.yaml#L28) file, set the environment variable `publish_github_pages: true` and the `build_web: true`.
+1. In the [release.yaml](./.github/workflows/release.yaml#L28) file, verify that both environment variables `publish_github_pages` and `build_web` are set to `true`.
 2. Trigger the [release.yaml](./.github/workflows/release.yaml) workflow by pushing a tag.
 3. In your GitHub repository, go to the `Settings` tab, then click on `Pages` in the sidebar. Navigate to the `Build and Deployment` section, select the `gh-pages` branch and set the `root` folder. Finally, click on `Save`. ![Github Pages](https://github-production-user-asset-6210df.s3.amazonaws.com/104745335/268780368-af547adf-d8e8-4bdf-90e5-b7ee717493dc.png)
 4. Wait a few minutes and your page will be available at a URL following this structure: `https://<Your GitHub username>.github.io/<Name of your repository>/`
