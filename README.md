@@ -124,7 +124,7 @@ To publish releases to itch.io, follow this release flow:
 4. In the [release.yaml](./.github/workflows/release.yaml#L22) file, set the environment variable `add_itchio_release: true`.
 5. Uncomment the `env.itchio_target` in [release.yaml](./.github/workflows/release.yaml#L25) and set it to your itch.io username and the name of the game on itch.io, separated by a slash (`/`). For example: `cart/build-a-better-buddy`. Double-check the URL of your game to ensure the name is correct.
 
-Once these steps are completed, any tag pushed to GitHub will trigger an itch.io release, and it will use the tag as the[user version](https://itch.io/docs/butler/pushing.html#specifying-your-own-version-number).
+Once these steps are completed, any tag pushed to GitHub will trigger an itch.io release, and it will use the tag as the [user version](https://itch.io/docs/butler/pushing.html#specifying-your-own-version-number).
 
 To make the game visible on your itch.io page, go to your game's configuration on itch.io, and change the `Kind of project` to HTML also locate your uploaded web files, and check the box that says, `This file will be played in the browser`.
 
