@@ -48,6 +48,7 @@ jobs:
         with:
           path: ${{ env.binary }}.zip
           name: wasm
+          retention-days: 1
 
       - name: Upload binaries to release
         if: ${{ env.add_binaries_to_github_release == 'true' }}
@@ -94,6 +95,7 @@ jobs:
         with:
           path: ${{ env.binary }}.zip
           name: linux
+          retention-days: 1
 
       - name: Upload binaries to release
         if: ${{ env.add_binaries_to_github_release == 'true' }}
@@ -136,6 +138,7 @@ jobs:
         with:
           path: ${{ env.binary }}.zip
           name: windows
+          retention-days: 1
 
       - name: Upload binaries to release
         if: ${{ env.add_binaries_to_github_release == 'true' }}
@@ -179,6 +182,7 @@ jobs:
         with:
           path: ${{ env.binary }}-macOS-intel.dmg
           name: macOS-intel
+          retention-days: 1
 
       - name: Upload binaries to release
         if: ${{ env.add_binaries_to_github_release == 'true' }}
@@ -222,6 +226,7 @@ jobs:
         with:
           path: ${{ env.binary }}-macOS-apple-silicon.dmg
           name: macOS-apple-silicon
+          retention-days: 1
 
       - name: Upload binaries to release
         if: ${{ env.add_binaries_to_github_release == 'true' }}
