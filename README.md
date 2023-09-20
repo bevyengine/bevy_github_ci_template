@@ -116,7 +116,7 @@ Once you complete the process, a new release will be available on GitHub, with t
 
 ### Publish on Itch.io
 
-To publish releases to itch.io, follow this release flow:
+To publish to itch.io, follow this release flow:
 
 1. Create an API key at <https://itch.io/user/settings/api-keys>
 2. In your GitHub repository, go to the "Settings" tab, click on "Secrets" under the "Actions" section in the sidebar, and add a repository secret named `BUTLER_CREDENTIALS`, with the API key as its value.
@@ -126,7 +126,9 @@ To publish releases to itch.io, follow this release flow:
 
 Once these steps are completed, any tag pushed to GitHub will trigger an itch.io release, and it will use the tag as the [user version](https://itch.io/docs/butler/pushing.html#specifying-your-own-version-number).
 
-To make the game visible on your itch.io page, go to your game's configuration on itch.io, and change the `Kind of project` to HTML also locate your uploaded web files, and check the box that says, `This file will be played in the browser`.
+If you want to make your game playable directly on your Itch.io page, follow the steps above, and make sure to build it for the web by setting the environment variable `env.build_web: true`, or by checking the box labeled `Build for Web` when manually triggering the workflow in GitHub.
+Next, to make the game visible on your Itch.io page, go to your game's configuration on Itch.io, and change the `Kind of project`. Additionally, locate your uploaded web files and check the box that says, `This file will be played in the browser`."
+
 
 ![Kind of project](https://user-images.githubusercontent.com/104745335/268805329-fb70e23e-44ee-4f2f-9d20-11d58ddeec9a.png)
 
