@@ -63,7 +63,7 @@ You can build for the following platforms:
 
 By default, it builds for all platforms, but you can disable specific targets by setting their environment variable  `false` in the ([release.yaml](.github/workflows/release.yaml#L9)) file.
 
-For example, `add_windows: false` will skip the Windows build.
+For example, `build_windows: false` will skip the Windows build.
 
 The build files will be uploaded to the artifacts section of their respective workflow runs. To access them, go to your GitHub repository, navigate to the `Actions` section, click on `Release` in the sidebar, select the `workflow run` triggered by your tag, and scroll down to find your artifacts.
 
@@ -86,9 +86,9 @@ You can publish to the following platforms:
   - [License](#license)
   - [Contribution](#contribution)
 
-By default, it only publishes to GitHub Releases, but you can enable or disable any target by setting their environment variable to `true` or `false` in the ([release.yaml](.github/workflows/release.yaml#L16)) file.
+By default, it only publishes to GitHub Releases, but you can enable or disable any target by setting their environment variable to `true` or `false` in the ([release.yaml](.github/workflows/release.yaml#L19)) file.
 
-For example, `add_github_pages_release: true` will publish the web version of your game to GitHub Pages.
+For example, `publish_github_pages: true` will publish the web version of your game to GitHub Pages.
 
 Every time you trigger this workflow, it will upload the files for every platform you enable in the build process.
 
@@ -102,7 +102,7 @@ For example: `bevy-game_v3.6_linux.zip`
 
 ### Publish on Github Release
 
-This action will occur automatically every time you push a tag if you have enabled the environment variable `add_github_release: true` in the [release.yaml](./.github/workflows/release.yaml#L19) file.
+This action will occur automatically every time you push a tag if you have enabled the environment variable `publish_github_releases: true` in the [release.yaml](./.github/workflows/release.yaml#L28) file.
 
 However, if you prefer more configuration options to manage your releases, you can do so through the GitHub CLI or the web browser:
 
@@ -121,7 +121,7 @@ To publish to itch.io, follow this release flow:
 1. Create an API key at <https://itch.io/user/settings/api-keys>
 2. In your GitHub repository, go to the "Settings" tab, click on "Secrets" under the "Actions" section in the sidebar, and add a repository secret named `BUTLER_CREDENTIALS`, with the API key as its value.
 3. Create your game page on itch.io if you haven't already.
-4. In the [release.yaml](./.github/workflows/release.yaml#L22) file, set the environment variable `add_itchio_release: true`.
+4. In the [release.yaml](./.github/workflows/release.yaml#L22) file, set the environment variable `publish_itchio: true`.
 5. Uncomment the `env.itchio_target` in [release.yaml](./.github/workflows/release.yaml#L25) and set it to your itch.io username and the name of the game on itch.io, separated by a slash (`/`). For example: `cart/build-a-better-buddy`. Double-check the URL of your game to ensure the name is correct.
 
 Once these steps are completed, any tag pushed to GitHub will trigger an itch.io release, and it will use the tag as the [user version](https://itch.io/docs/butler/pushing.html#specifying-your-own-version-number).
@@ -139,7 +139,7 @@ Next, to make the game visible on your Itch.io page, go to your game's configura
 
 To publish on GitHub Pages, follow these steps:
 
-1. In the [release.yaml](./.github/workflows/release.yaml#L28) file, set the environment variable `add_github_pages_release: true` and the `add_web: true`.
+1. In the [release.yaml](./.github/workflows/release.yaml#L28) file, set the environment variable `publish_github_pages: true` and the `build_web: true`.
 2. Trigger the [release.yaml](./.github/workflows/release.yaml) workflow by pushing a tag.
 3. In your GitHub repository, go to the `Settings` tab, then click on `Pages` in the sidebar. Navigate to the `Build and Deployment` section, select the `gh-pages` branch and set the `root` folder. Finally, click on `Save`. ![Github Pages](https://github-production-user-asset-6210df.s3.amazonaws.com/104745335/268780368-af547adf-d8e8-4bdf-90e5-b7ee717493dc.png)
 4. Wait a few minutes and your page will be available at a URL following this structure: `https://<Your GitHub username>.github.io/<Name of your repository>/`
