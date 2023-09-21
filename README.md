@@ -137,7 +137,7 @@ Next, to make the game visible on your Itch.io page, go to your game's configura
 
 ### Publish on Github pages
 
-To publish on GitHub Pages, follow these steps:
+If you want to publish your game to be playable in the browser on a [GitHub page](https://pages.github.com/) follow these steps:
 
 1. In the [release.yaml](./.github/workflows/release.yaml#L28) file, verify that both environment variables `publish_github_pages` and `build_web` are set to `true`.
 2. Trigger the [release.yaml](./.github/workflows/release.yaml) workflow by pushing a tag.
