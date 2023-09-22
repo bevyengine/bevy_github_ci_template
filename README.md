@@ -1,6 +1,6 @@
 # Bevy GitHub CI Template
 
-Template for setting up continuous integration (CI) on a GitHub project for Bevy. This template enables you to test your code, build for the Web, Linux, Windows, MacOS, and publish to GitHub Releases, Itch.io, and GitHub Pages.
+Template for setting up continuous integration (CI) and continuous deployment (CD) on a GitHub project for Bevy. This template enables you to test your code, build for the Web, Linux, Windows, MacOS, and publish to GitHub Releases, Itch.io, and GitHub Pages.
 
 It creates two workflows:
 
