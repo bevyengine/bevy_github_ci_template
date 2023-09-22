@@ -45,7 +45,7 @@ You can use the workflow as it is, but check that the name of your repository ma
 
 You can configure the builds and publish targets by changing the env variables in the [release.yaml](.github/workflows/release.yaml#L4) file.
 
-Also you can configure and triggered the workflow directly in your GitHub repo. Navigate to the `Actions` section, click `Release` on the sidebar, then press the `Run workflow` button and select the configuration for the build and publish targets you want.
+You can configure and trigger the workflow directly in your GitHub repository. Navigate to the `Actions` section, click `Release` on the sidebar, then press the `Run workflow` button and select the configuration for the build and publish targets you want.
 
 ![Run workflow](https://github-production-user-asset-6210df.s3.amazonaws.com/104745335/268779376-85f4a503-1564-4075-b1ee-2a830fda2b7c.png)
 
