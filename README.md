@@ -32,7 +32,7 @@ Definition: [.github/workflows/release.yaml](./.github/workflows/release.yaml)
 
 This workflow runs every time you push a tag to your repo.
 
-![Release workflow](https://user-images.githubusercontent.com/104745335/268805183-28e83868-fb19-4e5e-ae96-7553fa3ede3c.png)
+![Release workflow](https://github-production-user-asset-6210df.s3.amazonaws.com/104745335/270129182-904f75be-2e94-433c-956b-2b1758e9476a.png)
 
 Example using git:
 
