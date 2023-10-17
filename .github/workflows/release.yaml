@@ -67,7 +67,6 @@ jobs:
       run_build_web: ${{ ( inputs.tag &&  (contains(inputs.build_for, 'web') || contains(inputs.build_for, 'wasm')) ) || ( !inputs.tag && (contains(env.build_for, 'web') || contains(env.build_for, 'wasm')) ) }}
       run_build_linux: ${{ (inputs.tag && contains(inputs.build_for, 'linux')) || (!inputs.tag && contains(env.build_for, 'linux') ) }}
       run_build_windows: ${{ ( inputs.tag && contains(inputs.build_for, 'windows')) || (!inputs.tag && contains(env.build_for, 'windows') ) }}
-      run_build_macos: ${{ ( inputs.tag && contains(inputs.build_for, 'macos')) || (!inputs.tag && contains(env.build_for, 'macos') ) }}
       run_build_macos_intel:  ${{ ( inputs.tag && ( contains(inputs.build_for, 'intel') || contains(inputs.build_for, 'macos') )) || (!inputs.tag && (contains(env.build_for, 'intel') || contains(env.build_for, 'macos')) ) }}
       run_build_macos_apple_silicon: ${{ ( inputs.tag && ( contains(inputs.build_for, 'apple') || contains(inputs.build_for, 'macos') )) || (!inputs.tag && (contains(env.build_for, 'apple') || contains(env.build_for, 'macos')) ) }}
       run_publish_github_releases: ${{ ( inputs.tag && contains(inputs.publish_to, 'releases')) || (!inputs.tag && contains(env.publish_to, 'releases') ) }}
@@ -112,7 +111,7 @@ jobs:
   # Build for MacOS x86_64/ARM64
   build-macos:
     needs: load-env
-    if: needs.load-env.outputs.run_build_macos == 'true'
+    if: needs.load-env.outputs.run_build_macos_intel == 'true' || needs.load-env.outputs.run_build_macos_apple_silicon == 'true'
     uses: ./.github/workflows/macos.yaml
     name: build
     with:
