@@ -1,0 +1,64 @@
+name: Build Web
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      binary:
+        required: true
+        type: string
+      run_publish_github_pages:
+        required: true
+        type: string
+
+jobs:
+  github-releases:
+    name: web
+    env:
+      platform: web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: install wasm-bindgen-cli
+        run: |
+          cargo install wasm-bindgen-cli
+
+      - name: Build
+        run: |
+          cargo build --release --target wasm32-unknown-unknown
+
+      - name: Set file name
+        id: set_file_name
+        run: |
+          echo "file_name=${{ inputs.binary }}_${{ inputs.tag }}_${{ env.platform }}" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare package
+        run: |
+          wasm-bindgen --no-typescript --out-name bevy_game --out-dir wasm --target web target/wasm32-unknown-unknown/release/${{ inputs.binary }}.wasm
+          cp -r assets wasm/
+
+      - name: Upload github-page to artifacts
+        if: inputs.run_publish_github_pages == 'true'
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./wasm
+          retention-days: 1
+
+      - name: Package as a zip
+        working-directory: ./wasm
+        run: |
+          zip --recurse-paths ../${{ steps.set_file_name.outputs.file_name  }}.zip .
+
+      - name: Upload binaries to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.platform }}
+          path: ${{ steps.set_file_name.outputs.file_name  }}.zip
+          retention-days: 1

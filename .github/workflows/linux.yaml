@@ -1,0 +1,56 @@
+name: Build Linux
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      binary:
+        required: true
+        type: string
+
+
+jobs:
+  github-releases:
+    name: linux
+    env:
+      platform: linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-gnu
+
+      - name: install dependencies
+        run: |
+          sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
+
+      - name: Build
+        run: |
+          cargo build --release --target x86_64-unknown-linux-gnu
+
+      - name: Set file name
+        id: set_file_name
+        run: |
+          echo "file_name=${{ inputs.binary }}_${{ inputs.tag }}_${{ env.platform }}" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare package
+        run: |
+          mkdir linux
+          cp target/x86_64-unknown-linux-gnu/release/${{ inputs.binary }} linux/
+          cp -r assets linux/
+
+      - name: Package as a zip
+        working-directory: ./linux
+        run: |
+          zip --recurse-paths ../${{ steps.set_file_name.outputs.file_name  }}.zip .
+
+      - name: Upload binaries to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.platform }}
+          path: ${{ steps.set_file_name.outputs.file_name  }}.zip
+          retention-days: 1

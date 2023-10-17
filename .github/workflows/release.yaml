@@ -56,6 +56,7 @@ on:
         type: string
 
 jobs:
+  # Load variables
   load-env:
     runs-on: ubuntu-latest
     steps:
@@ -66,249 +67,69 @@ jobs:
       run_build_web: ${{ ( inputs.tag &&  (contains(inputs.build_for, 'web') || contains(inputs.build_for, 'wasm')) ) || ( !inputs.tag && (contains(env.build_for, 'web') || contains(env.build_for, 'wasm')) ) }}
       run_build_linux: ${{ (inputs.tag && contains(inputs.build_for, 'linux')) || (!inputs.tag && contains(env.build_for, 'linux') ) }}
       run_build_windows: ${{ ( inputs.tag && contains(inputs.build_for, 'windows')) || (!inputs.tag && contains(env.build_for, 'windows') ) }}
-      run_build_macos_intel: ${{ ( inputs.tag && (contains(inputs.build_for, 'intel') || contains(inputs.build_for, 'macos')) ) || (!inputs.tag && (contains(env.build_for, 'intel') || contains(env.build_for, 'macos')) ) }}
+      run_build_macos: ${{ ( inputs.tag && contains(inputs.build_for, 'macos')) || (!inputs.tag && contains(env.build_for, 'macos') ) }}
+      run_build_macos_intel:  ${{ ( inputs.tag && ( contains(inputs.build_for, 'intel') || contains(inputs.build_for, 'macos') )) || (!inputs.tag && (contains(env.build_for, 'intel') || contains(env.build_for, 'macos')) ) }}
       run_build_macos_apple_silicon: ${{ ( inputs.tag && ( contains(inputs.build_for, 'apple') || contains(inputs.build_for, 'macos') )) || (!inputs.tag && (contains(env.build_for, 'apple') || contains(env.build_for, 'macos')) ) }}
       run_publish_github_releases: ${{ ( inputs.tag && contains(inputs.publish_to, 'releases')) || (!inputs.tag && contains(env.publish_to, 'releases') ) }}
       run_publish_itchio: ${{ ( inputs.tag && contains(inputs.publish_to, 'itchio')) || (!inputs.tag && contains(env.publish_to, 'itchio') ) }}
       run_publish_github_pages: ${{ ( inputs.tag && contains(inputs.publish_to, 'pages')) || (!inputs.tag && contains(env.publish_to, 'pages') ) }}
       itchio_target: ${{ inputs.itchio_target || env.itchio_target }}
       tag: ${{ ( inputs.tag || steps.get_version.outputs.tag ) }}
+      binary: ${{ env.binary }}
 
-  # Build for Web Wasm
+  # Build for Web/WASM
   build-web:
-    runs-on: ubuntu-latest
     needs: load-env
     if: needs.load-env.outputs.run_build_web == 'true'
-    env:
-      platform: web
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: wasm32-unknown-unknown
-
-      - name: install wasm-bindgen-cli
-        run: |
-          cargo install wasm-bindgen-cli
-
-      - name: Build
-        run: |
-          cargo build --release --target wasm32-unknown-unknown
-
-      - name: Set file name
-        id: set_file_name
-        run: |
-          echo "file_name=${{ env.binary }}_${{ needs.load-env.outputs.tag }}_${{ env.platform }}" >> "$GITHUB_OUTPUT"
-
-      - name: Prepare package
-        run: |
-          wasm-bindgen --no-typescript --out-name bevy_game --out-dir wasm --target web target/wasm32-unknown-unknown/release/${{ env.binary }}.wasm
-          cp -r assets wasm/
-
-      - name: Upload github-page to artifacts
-        if: needs.load-env.outputs.run_publish_github_pages == 'true'
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: ./wasm
-          retention-days: 1
-
-      - name: Package as a zip
-        working-directory: ./wasm
-        run: |
-          zip --recurse-paths ../${{ steps.set_file_name.outputs.file_name  }}.zip .
-
-      - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.platform }}
-          path: ${{ steps.set_file_name.outputs.file_name  }}.zip
-          retention-days: 1
+    uses: ./.github/workflows/web.yaml
+    name: build
+    with:
+      tag: ${{ needs.load-env.outputs.tag }}
+      binary: ${{ needs.load-env.outputs.binary }}
+      run_publish_github_pages: ${{ needs.load-env.outputs.run_publish_github_pages }}
 
   # Build for Linux x86_64
   build-linux:
-    runs-on: ubuntu-latest
     needs: load-env
     if: needs.load-env.outputs.run_build_linux == 'true'
-    env:
-      platform: linux
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-unknown-linux-gnu
-
-      - name: install dependencies
-        run: |
-          sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
-
-      - name: Build
-        run: |
-          cargo build --release --target x86_64-unknown-linux-gnu
-
-      - name: Set file name
-        id: set_file_name
-        run: |
-          echo "file_name=${{ env.binary }}_${{ needs.load-env.outputs.tag }}_${{ env.platform }}" >> "$GITHUB_OUTPUT"
-
-      - name: Prepare package
-        run: |
-          mkdir linux
-          cp target/x86_64-unknown-linux-gnu/release/${{ env.binary }} linux/
-          cp -r assets linux/
-
-      - name: Package as a zip
-        working-directory: ./linux
-        run: |
-          zip --recurse-paths ../${{ steps.set_file_name.outputs.file_name  }}.zip .
-
-      - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.platform }}
-          path: ${{ steps.set_file_name.outputs.file_name  }}.zip
-          retention-days: 1
+    uses: ./.github/workflows/linux.yaml
+    name: build
+    with:
+      tag: ${{ needs.load-env.outputs.tag }}
+      binary: ${{ needs.load-env.outputs.binary }}
 
   # Build for Windows x86_64
   build-windows:
-    runs-on: windows-latest
     needs: load-env
     if: needs.load-env.outputs.run_build_windows == 'true'
-    env:
-      platform: windows
-    steps:
-      - uses: actions/checkout@v4
+    uses: ./.github/workflows/windows.yaml
+    name: build
+    with:
+      tag: ${{ needs.load-env.outputs.tag }}
+      binary: ${{ needs.load-env.outputs.binary }}
 
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-pc-windows-msvc
 
-      - name: Build
-        run: |
-          cargo build --release --target x86_64-pc-windows-msvc
-
-      - name: Set file name
-        id: set_file_name
-        shell: bash
-        run: |
-          echo "file_name=${{ env.binary }}_${{ needs.load-env.outputs.tag }}_${{ env.platform }}" >> "$GITHUB_OUTPUT"
-
-      - name: Prepare package
-        shell: bash
-        run: |
-          mkdir windows
-          cp target/x86_64-pc-windows-msvc/release/${{ env.binary }}.exe windows/
-          cp -r assets windows/
-
-      - name: Package as a zip
-        run: |
-          Compress-Archive -Path windows/* -DestinationPath "${{ steps.set_file_name.outputs.file_name  }}.zip"
-
-      - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.platform }}
-          path: ${{ steps.set_file_name.outputs.file_name  }}.zip
-          retention-days: 1
-
-  # Build for MacOS x86_64
-  build-macos-intel:
-    runs-on: macos-latest
+  # Build for MacOS x86_64/ARM64
+  build-macos:
     needs: load-env
-    if: needs.load-env.outputs.run_build_macos_intel == 'true'
-    env:
-      platform: macos_intel
-    steps:
-      - uses: actions/checkout@v4
+    if: needs.load-env.outputs.run_build_macos == 'true'
+    uses: ./.github/workflows/macos.yaml
+    name: build
+    with:
+      tag: ${{ needs.load-env.outputs.tag }}
+      binary: ${{ needs.load-env.outputs.binary }}
+      run_macos_intel: ${{ needs.load-env.outputs.run_build_macos_intel }}
+      run_macos_apple_silicon: ${{ needs.load-env.outputs.run_build_macos_apple_silicon }}
 
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-apple-darwin
 
-      - name: Environment Setup
-        run: |
-          export CFLAGS="-fno-stack-check"
-          export MACOSX_DEPLOYMENT_TARGET="10.9"
-
-      - name: Build
-        run: |
-          cargo build --release --target x86_64-apple-darwin
-
-      - name: Set Paths
-        id: set_paths
-        run: |
-          echo "file_name=${{ env.binary }}_${{ needs.load-env.outputs.tag }}_${{ env.platform }}" >> "$GITHUB_OUTPUT"
-          echo "app_structure=${{ env.binary }}.app/Contents/MacOS" >> "$GITHUB_OUTPUT"
-
-      - name: Prepare Package
-        run: |
-          mkdir -p ${{ steps.set_paths.outputs.app_structure }}
-          cp target/x86_64-apple-darwin/release/${{ env.binary }} ${{ steps.set_paths.outputs.app_structure }}
-          cp -r assets ${{ steps.set_paths.outputs.app_structure }}
-          hdiutil create -fs HFS+ -volname "${{ env.binary }}" -srcfolder ${{ env.binary }}.app ${{ steps.set_paths.outputs.file_name  }}.dmg
-
-      - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.platform }}
-          path: ${{ steps.set_paths.outputs.file_name  }}.dmg
-          retention-days: 1
-
-  # Build for MacOS Apple Silicon
-  build-macos-apple-silicon:
-    runs-on: macos-latest
-    needs: load-env
-    if: needs.load-env.outputs.run_build_macos_apple_silicon == 'true'
-    env:
-      platform: macos_apple_silicon
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: aarch64-apple-darwin
-
-      - name: Environment
-        # macos 11 was the first version to support ARM
-        run: |
-          export MACOSX_DEPLOYMENT_TARGET="11"
-
-      - name: Build
-        run: |
-          cargo build --release --target aarch64-apple-darwin
-
-      - name: Set paths
-        id: set_paths
-        run: |
-          echo "file_name=${{ env.binary }}_${{ needs.load-env.outputs.tag }}_${{ env.platform }}" >> "$GITHUB_OUTPUT"
-          echo "app_structure=${{ env.binary }}.app/Contents/MacOS" >> "$GITHUB_OUTPUT"
-
-      - name: Prepare Package
-        run: |
-          mkdir -p ${{ steps.set_paths.outputs.app_structure }}
-          cp target/aarch64-apple-darwin/release/${{ env.binary }} ${{ steps.set_paths.outputs.app_structure }}
-          cp -r assets ${{ steps.set_paths.outputs.app_structure }}
-          hdiutil create -fs HFS+ -volname "${{ env.binary }}" -srcfolder ${{ env.binary }}.app ${{ steps.set_paths.outputs.file_name  }}.dmg
-
-      - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.platform }}
-          path: ${{ steps.set_paths.outputs.file_name  }}.dmg
-          retention-days: 1
-
-  # Release binaries in github
+  # Release binaries in GitHub
   publish-github-releases:
-    name: Release for ${{ matrix.artifact_name }}
     needs:
       - load-env
       - build-web
       - build-linux
       - build-windows
-      - build-macos-apple-silicon
-      - build-macos-intel
+      - build-macos
     if: ${{ always() && !failure() && !cancelled() && needs.load-env.outputs.run_publish_github_releases == 'true'}}
     strategy:
       fail-fast: false
@@ -324,92 +145,35 @@ jobs:
             os: macos-latest
           - artifact_name: macos_intel
             os: macos-latest
+    uses: ./.github/workflows/github_releases.yaml
+    name: publish / github-releases
+    with:
+      tag: ${{ needs.load-env.outputs.tag }}
+      os: ${{ matrix.os }}
+      artifact_name: ${{ matrix.artifact_name }}
+    secrets: inherit
 
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: xSAVIKx/artifact-exists-action@v0
-        id: check_artifact
-        with:
-          name: ${{ matrix.artifact_name }}
-
-      - name: Download artifacts
-        if: steps.check_artifact.outputs.exists == 'true'
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ matrix.artifact_name }}
-          path: ./artifact
-
-      - name: Get file
-        if: steps.check_artifact.outputs.exists == 'true'
-        id: get_file_name
-        shell: bash
-        working-directory: ./artifact
-        run: |
-          ls -R
-          echo "file_name=$(ls | head -n 1)" >> "$GITHUB_OUTPUT"
-
-      - name: Upload artifact to release
-        if: steps.check_artifact.outputs.exists == 'true'
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./artifact/${{ steps.get_file_name.outputs.file_name }}
-          tag: ${{ needs.load-env.outputs.tag }}
-          overwrite: true
-
-  # Publish to itch.io
+  # Publish to Itch.io
   publish-itchio:
-    runs-on: ubuntu-latest
     needs:
       - load-env
       - build-web
       - build-linux
       - build-windows
-      - build-macos-apple-silicon
-      - build-macos-intel
+      - build-macos
     if: ${{ always() && !failure() && !cancelled() && needs.load-env.outputs.run_publish_itchio == 'true' && needs.load-env.outputs.itchio_target != '' }}
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path: ./builds
+    uses: ./.github/workflows/itchio.yaml
+    name: publish
+    with:
+      tag: ${{ needs.load-env.outputs.tag }}
+      itchio_target: ${{ needs.load-env.outputs.itchio_target }}
+    secrets: inherit
 
-      - name: Install butler
-        run: |
-          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
-          unzip butler.zip
-          chmod +x butler
-          ./butler -V
-
-      - name: Upload to itch.io
-        env:
-          BUTLER_API_KEY: ${{ secrets.BUTLER_CREDENTIALS }}
-        run: |
-          for channel in $(ls builds); do
-            if [ "$channel" = "github-pages" ]; then
-              continue
-            fi
-            ./butler push \
-              --fix-permissions \
-              --userversion="${{ needs.load-env.outputs.tag }}" \
-              builds/$channel/* \
-              ${{ needs.load-env.outputs.itchio_target }}:$channel
-          done
-
-  # Publish to github page
+  # Publish to GitHub Pages
   publish-github-pages:
-    runs-on: ubuntu-latest
     needs:
       - load-env
       - build-web
     if: ${{ needs.load-env.outputs.run_publish_github_pages == 'true' }}
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+    uses: ./.github/workflows/github_pages.yaml
+    name: publish
