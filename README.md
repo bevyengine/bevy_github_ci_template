@@ -92,6 +92,8 @@ Licensed under either of
 
 at your option.
 
+The Ducky sprite is CC-0 licensed by [Caz Creates Games](https://caz-creates-games.itch.io/ducky-2).
+
 ## Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally submitted
