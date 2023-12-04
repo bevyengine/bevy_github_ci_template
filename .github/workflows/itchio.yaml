@@ -1,0 +1,43 @@
+name: Publish Itch.io
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      itchio_target:
+        required: true
+        type: string
+
+jobs:
+  publish-itchio:
+    name: itchio
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ./builds
+
+      - name: Install butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
+          unzip butler.zip
+          chmod +x butler
+          ./butler -V
+
+      - name: Upload to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_CREDENTIALS }}
+        run: |
+          for channel in $(ls builds); do
+            if [ "$channel" = "github-pages" ]; then
+              continue
+            fi
+            ./butler push \
+              --fix-permissions \
+              --userversion="${{ inputs.tag }}" \
+              builds/$channel/* \
+              ${{ inputs.itchio_target }}:$channel
+          done
