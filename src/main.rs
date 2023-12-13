@@ -4,10 +4,12 @@
 // Feel free to delete this line.
 #![allow(clippy::too_many_arguments, clippy::type_complexity)]
 
+use bevy::asset::AssetMetaCheck;
 use bevy::prelude::*;
 
 fn main() {
     App::new()
+        .insert_resource(AssetMetaCheck::Never)
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
         .run();
