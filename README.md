@@ -36,6 +36,8 @@ If you don't want to target some of those platforms, you can remove the correspo
 
 If you don't want to attach the builds to the GitHub release, set `env.add_binaries_to_github_release` to `false`.
 
+If you are using Git LFS, set `env.use_git_lfs` to `true` so your assets are properly checked out.
+
 ### Git Tag from GitHub UI
 
 You can follow [Managing releases in a repository](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)
