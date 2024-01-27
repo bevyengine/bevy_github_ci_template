@@ -38,6 +38,9 @@ If you don't want to attach the builds to the GitHub release, set `env.add_binar
 
 If you are using Git LFS, set `env.use_git_lfs` to `true` so your assets are properly checked out.
 
+> [!Warning]
+> GitHub's LFS storage has a quota. Please take a look at GitHub's documentation [here](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-storage-and-bandwidth-usage) to understand the quota and costs before enabling this option.
+
 ### Git Tag from GitHub UI
 
 You can follow [Managing releases in a repository](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)
