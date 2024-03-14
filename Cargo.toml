@@ -16,4 +16,4 @@ opt-level = 1
 opt-level = 3
 
 [dependencies]
-bevy = "0.11"
+bevy = "0.12"
