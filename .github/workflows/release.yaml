@@ -29,7 +29,8 @@ jobs:
           override: true
       - name: install wasm-bindgen-cli
         run: |
-          cargo install -f wasm-bindgen-cli  --version 0.2.106
+          version=`cargo metadata --format-version 1 | jq --raw-output '.packages[] | select(.name=="wasm-bindgen") | .version'`
+          cargo install -f wasm-bindgen-cli --version $version
 
       - name: Build
         run: |
