@@ -33,7 +33,8 @@ jobs:
           targets: wasm32-unknown-unknown
       - name: install wasm-bindgen-cli
         run: |
-          cargo install wasm-bindgen-cli
+          version=`cargo metadata --format-version 1 | jq --raw-output '.packages[] | select(.name=="wasm-bindgen") | .version'`
+          cargo install -f wasm-bindgen-cli --version $version
 
       - name: Build
         run: |
