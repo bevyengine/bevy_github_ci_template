@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: olegtarasov/get-tag@v2.1.2
         id: get_version
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           lfs: ${{ env.use_git_lfs }}
       - uses: dtolnay/rust-toolchain@stable
@@ -51,7 +51,7 @@ jobs:
           zip --recurse-paths ../${{ env.binary }}.zip .
 
       - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           path: ${{ env.binary }}.zip
           name: wasm
@@ -74,7 +74,7 @@ jobs:
     steps:
       - uses: olegtarasov/get-tag@v2.1.2
         id: get_version
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           lfs: ${{ env.use_git_lfs }}
       - uses: dtolnay/rust-toolchain@stable
@@ -100,7 +100,7 @@ jobs:
           zip --recurse-paths ../${{ env.binary }}.zip .
 
       - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           path: ${{ env.binary }}.zip
           name: linux
@@ -123,7 +123,7 @@ jobs:
     steps:
       - uses: olegtarasov/get-tag@v2.1.2
         id: get_version
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           lfs: ${{ env.use_git_lfs }}
       - uses: dtolnay/rust-toolchain@stable
@@ -146,7 +146,7 @@ jobs:
           Compress-Archive -Path windows/* -DestinationPath ${{ env.binary }}.zip
 
       - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           path: ${{ env.binary }}.zip
           name: windows
@@ -169,7 +169,7 @@ jobs:
     steps:
       - uses: olegtarasov/get-tag@v2.1.2
         id: get_version
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           lfs: ${{ env.use_git_lfs }}
       - uses: dtolnay/rust-toolchain@stable
@@ -192,7 +192,7 @@ jobs:
           hdiutil create -fs HFS+ -volname "${{ env.binary }}" -srcfolder ${{ env.binary }}.app ${{ env.binary }}-macOS-intel.dmg
 
       - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           path: ${{ env.binary }}-macOS-intel.dmg
           name: macOS-intel
@@ -215,7 +215,7 @@ jobs:
     steps:
       - uses: olegtarasov/get-tag@v2.1.2
         id: get_version
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           lfs: ${{ env.use_git_lfs }}
       - uses: dtolnay/rust-toolchain@stable
@@ -238,7 +238,7 @@ jobs:
           hdiutil create -fs HFS+ -volname "${{ env.binary }}-macOS-apple-silicon" -srcfolder ${{ env.binary }}.app ${{ env.binary }}-macOS-apple-silicon.dmg
 
       - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           path: ${{ env.binary }}-macOS-apple-silicon.dmg
           name: macOS-apple-silicon
@@ -280,7 +280,7 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: ./builds
 
